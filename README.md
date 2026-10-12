@@ -72,12 +72,16 @@ Requires a Hyprland Wayland session; supports `x86_64` and `aarch64`. Install fr
 omarchy pkg aur add omarchy-screenshot
 ```
 
-Set a screenshot shortcut in `~/.config/hypr/bindings.lua`:
+Set shortcuts in `~/.config/hypr/bindings.lua` for immediate capture with `Ctrl+Alt+A` and a five-second countdown with `Ctrl+Alt+Shift+A`:
 
 ```lua
 hl.unbind("CTRL + ALT + A")
 o.bind("CTRL + ALT + A", "Omarchy Screenshot", "omarchy-screenshot")
+hl.unbind("CTRL + ALT + SHIFT + A")
+o.bind("CTRL + ALT + SHIFT + A", "Screenshot after 5 seconds", "omarchy-screenshot --delay 5")
 ```
+
+The delayed shortcut shows a film-style circular countdown from 5 to 1 in the center of the active screen. It passes keyboard and mouse input through, so you can switch windows or open menus. The countdown fades out and closes before capturing, keeping it out of the screenshot. You can also run `omarchy-screenshot --delay 5`; `--delay` accepts 0–60 seconds, with 0 (the default) capturing immediately.
 
 Building from source requires `cmake`, `gcc`, `pkgconf`, `qt6-base`, `qt6-declarative`, `qt6-wayland`, `qt6-tools`, `layer-shell-qt`, `wayland`, `wayland-protocols`, `grim`, `wl-clipboard`, and `hyprland`. Tests also require `python` by default; disable them with `-DBUILD_TESTING=OFF`.
 
@@ -116,7 +120,7 @@ systemctl --user enable --now omarchy-screenshot.socket   # Enable
 systemctl --user disable --now omarchy-screenshot.socket  # Disable and stop the daemon
 ```
 
-Without systemd, add `omarchy-screenshot --daemon` to your session's autostart. Keep the same shortcut; only launches without options use the daemon. `--language` and self-tests run independently.
+Without systemd, add `omarchy-screenshot --daemon` to your session's autostart. Keep the same shortcut; only launches without options use the daemon. `--language`, `--delay`, and self-tests run independently.
 
 Run `systemctl --user edit omarchy-screenshot.service` to change the idle timeout (seconds; `0` means no timeout), keeping the actual installation path:
 
