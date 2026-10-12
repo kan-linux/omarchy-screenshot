@@ -99,6 +99,19 @@ cmake --build build -j
 cmake --install build
 ```
 
+### Omarchy 栏插件
+
+仓库也提供 Quickshell 栏按钮，插件 ID 为 `io.github.manateelazycat.screenshot`。需要先安装原生截图程序；标准插件安装只安装栏按钮，不会编译或安装 Qt 程序。5 秒倒计时要求原生程序版本 0.1.12 或更新版本。
+
+```sh
+omarchy pkg aur add omarchy-screenshot
+omarchy plugin add https://github.com/manateelazycat/omarchy-screenshot --enable
+```
+
+左键点击相机按钮立即截图，右键点击显示 5 秒圆环倒计时。插件从 `PATH` 启动 `omarchy-screenshot`；使用本地构建时，可在栏配置中的对应条目设置 `"command": "/home/yourname/.local/bin/omarchy-screenshot"`。安装栏按钮不会修改 Hyprland 快捷键，快捷键按上方示例手动配置。
+
+卸载栏按钮：`omarchy plugin remove io.github.manateelazycat.screenshot`。需要同时卸载 AUR 程序时，运行 `omarchy pkg drop omarchy-screenshot`。从源码安装到 `~/.local` 时，先用 `systemctl --user disable --now omarchy-screenshot.socket` 和 `systemctl --user stop omarchy-screenshot.service` 停止可选的常驻进程，再删除 `~/.local/bin/omarchy-screenshot` 及安装的 `omarchy-screenshot.service`、`omarchy-screenshot.socket` 用户服务文件；从 `~/.config/hypr/bindings.lua` 移除自己添加的快捷键。
+
 ### 测试
 
 `ctest --test-dir build --output-on-failure` 无需桌面会话，可检查翻译、滚动拼接、光标隐藏与恢复、常驻进程及不同缩放下的图像采样。在 Hyprland 中运行 `./build/cursor-live-test` 可验证鼠标跨屏移动、切换三种光标时的普通截图和滚动取帧；测试期间各屏会短暂显示纯色画面。以下自检可用 `./build/omarchy-screenshot` 加对应参数运行：

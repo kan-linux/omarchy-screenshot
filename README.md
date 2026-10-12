@@ -99,6 +99,19 @@ cmake --build build -j
 cmake --install build
 ```
 
+### Omarchy bar plugin
+
+The repository also supplies a Quickshell bar widget with plugin ID `io.github.manateelazycat.screenshot`. Install the native application first; the standard plugin installer copies the widget but does not compile or install the Qt application. The five-second countdown requires native version 0.1.12 or later.
+
+```sh
+omarchy pkg aur add omarchy-screenshot
+omarchy plugin add https://github.com/manateelazycat/omarchy-screenshot --enable
+```
+
+Left-click the camera button to capture immediately, or right-click for the five-second circular countdown. The widget launches `omarchy-screenshot` from `PATH`. For a local build, configure its bar entry with `"command": "/home/yourname/.local/bin/omarchy-screenshot"`. Installing the widget does not change Hyprland shortcuts; configure those explicitly using the example above.
+
+Remove the widget with `omarchy plugin remove io.github.manateelazycat.screenshot`. To also remove an AUR installation, run `omarchy pkg drop omarchy-screenshot`. For a source installation under `~/.local`, stop its optional socket and daemon with `systemctl --user disable --now omarchy-screenshot.socket` and `systemctl --user stop omarchy-screenshot.service`, then remove `~/.local/bin/omarchy-screenshot` and any installed `omarchy-screenshot.service` and `omarchy-screenshot.socket` user units. Remove shortcut entries you added from `~/.config/hypr/bindings.lua`.
+
 ### Tests
 
 `ctest --test-dir build --output-on-failure` checks translations, scroll stitching, cursor suppression and restoration, the daemon, and image sampling at different scales without a desktop session. Inside Hyprland, `./build/cursor-live-test` checks monitor captures and scrolling frames while the pointer moves across outputs and changes between three shapes; it briefly covers each screen with a solid fixture. Run these additional checks with `./build/omarchy-screenshot` and the listed options:
