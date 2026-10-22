@@ -31,7 +31,7 @@ jobs:
       - name: Publish AUR package
         uses: KSXGitHub/github-actions-deploy-aur@v4.1.2
         with:
-          pkgname: omarchy-screenshot
+          pkgname: screenshot
           pkgbuild: ./PKGBUILD
           updpkgsums: true
           commit_username: ${{ secrets.AUR_USERNAME }}

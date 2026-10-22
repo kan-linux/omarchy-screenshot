@@ -77,7 +77,7 @@ Rectangle {
     view->setResizeMode(QQuickView::SizeRootObjectToView);
     view->setFlags(Qt::FramelessWindowHint);
     auto *layer = LayerShellQt::Window::get(view.get());
-    layer->setScope(QStringLiteral("omarchy-screenshot-cursor-test"));
+    layer->setScope(QStringLiteral("screenshot-cursor-test"));
     layer->setLayer(LayerShellQt::Window::LayerOverlay);
     layer->setAnchors(
         LayerShellQt::Window::Anchors(LayerShellQt::Window::AnchorTop) |

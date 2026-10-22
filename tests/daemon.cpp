@@ -50,7 +50,7 @@ class DaemonTest : public QObject {
 private slots:
   void socketPathFollowsRuntimeDir() {
     qputenv("XDG_RUNTIME_DIR", "/run/user/4242");
-    QCOMPARE(daemonSocketPath(), std::string("/run/user/4242/omarchy-screenshot.sock"));
+    QCOMPARE(daemonSocketPath(), std::string("/run/user/4242/screenshot.sock"));
     qunsetenv("XDG_RUNTIME_DIR");
     QVERIFY(daemonSocketPath().empty());
   }

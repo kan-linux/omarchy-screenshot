@@ -186,7 +186,7 @@ void sessionDone(void *data, ext_image_copy_capture_session_v1 *session) {
   }
   const int stride = capture->width * 4;
   capture->size = size_t(stride) * size_t(capture->height);
-  const int fd = memfd_create("omarchy-screenshot", MFD_CLOEXEC);
+  const int fd = memfd_create("screenshot", MFD_CLOEXEC);
   if (fd < 0 || ftruncate(fd, off_t(capture->size)) != 0) {
     if (fd >= 0)
       close(fd);

@@ -1,9 +1,9 @@
 [Unit]
-Description=Omarchy Screenshot capture requests
+Description=Screenshot capture requests
 PartOf=graphical-session.target
 
 [Socket]
-ListenStream=%t/omarchy-screenshot.sock
+ListenStream=%t/screenshot.sock
 SocketMode=0600
 RemoveOnStop=yes
 

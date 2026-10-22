@@ -12,7 +12,7 @@ BarWidget {
     implicitHeight: button.implicitHeight
 
     function capture(delay) {
-        const command = String(root.setting("command", "omarchy-screenshot"))
+        const command = String(root.setting("command", "screenshot"))
         Quickshell.execDetached(delay > 0
             ? [command, "--delay", String(delay)] : [command])
     }

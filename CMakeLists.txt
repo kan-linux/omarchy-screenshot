@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 cmake_minimum_required(VERSION 3.21)
-project(omarchy_screenshot VERSION 0.1.12 LANGUAGES C CXX)
+project(screenshot VERSION 0.1.12 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -50,7 +50,7 @@ foreach(protocol IN LISTS capture_protocols)
     list(APPEND protocol_sources "${protocol_header}" "${protocol_code}")
 endforeach()
 
-qt_add_executable(omarchy-screenshot
+qt_add_executable(screenshot
     src/main.cpp
     src/capturecontroller.cpp
     src/capturecontroller.h
@@ -85,26 +85,26 @@ set_source_files_properties(qml/ScrollCapture.qml PROPERTIES QT_RESOURCE_ALIAS S
 set_source_files_properties(qml/SelectionResizeHandle.qml PROPERTIES QT_RESOURCE_ALIAS SelectionResizeHandle.qml)
 set_source_files_properties(qml/PinOverlay.qml PROPERTIES QT_RESOURCE_ALIAS PinOverlay.qml)
 set_source_files_properties(qml/Countdown.qml PROPERTIES QT_RESOURCE_ALIAS Countdown.qml)
-qt_add_qml_module(omarchy-screenshot
+qt_add_qml_module(screenshot
     URI OmarchyScreenshot
     VERSION 1.0
     QML_FILES qml/Overlay.qml qml/ToolbarGlyph.qml qml/AnnotationToolbar.qml qml/LongOverlay.qml qml/ScrollCapture.qml qml/SelectionResizeHandle.qml qml/PinOverlay.qml qml/Countdown.qml
 )
 
-target_link_libraries(omarchy-screenshot PRIVATE
+target_link_libraries(screenshot PRIVATE
     Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::Test LayerShellQt::Interface
     PkgConfig::WAYLAND_CLIENT
 )
-target_include_directories(omarchy-screenshot PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(screenshot PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 set(screenshot_locales
     az be bg hr cs da nl et fi fr ka de el he hu is ga it ja kk ky lo
     lv lt mk nb pl pt_PT pt_BR ro ru sr sk sl es sv tg tr uk zh_CN zh_TW
 )
 foreach(locale IN LISTS screenshot_locales)
-    list(APPEND screenshot_translations "translations/omarchy-screenshot_${locale}.ts")
+    list(APPEND screenshot_translations "translations/screenshot_${locale}.ts")
 endforeach()
-qt_add_translations(omarchy-screenshot
+qt_add_translations(screenshot
     TS_FILES ${screenshot_translations}
     SOURCES src/main.cpp src/capturecontroller.cpp src/virtualpointer.cpp qml/Overlay.qml
         qml/AnnotationToolbar.qml qml/LongOverlay.qml qml/ScrollCapture.qml qml/PinOverlay.qml
@@ -116,12 +116,12 @@ if(BUILD_TESTING)
     find_package(Python3 REQUIRED COMPONENTS Interpreter)
     add_test(NAME translations
         COMMAND Python3::Interpreter "${CMAKE_CURRENT_SOURCE_DIR}/tests/translations.py"
-            --app $<TARGET_FILE:omarchy-screenshot>
+            --app $<TARGET_FILE:screenshot>
             --lupdate $<TARGET_FILE:Qt6::lupdate>
             --source "${CMAKE_CURRENT_SOURCE_DIR}"
     )
     add_test(NAME scroll-stitch
-        COMMAND omarchy-screenshot --scroll-stitch-test)
+        COMMAND screenshot --scroll-stitch-test)
     set_tests_properties(scroll-stitch PROPERTIES
         ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
     # Builds the controller again so reset() is tested without a compositor.
@@ -183,18 +183,18 @@ if(BUILD_TESTING)
 endif()
 
 include(GNUInstallDirs)
-install(TARGETS omarchy-screenshot RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS screenshot RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # systemd starts the resident daemon on the first request and lets it exit
 # when idle. Relative to the install prefix, so `--prefix` relocates it; a
 # per-user install (~/.local) should point this at ~/.local/share/systemd/user.
 set(SYSTEMD_USER_UNIT_DIR "lib/systemd/user"
     CACHE STRING "Where to install the systemd user units")
-configure_file(systemd/omarchy-screenshot.service.in
-    "${CMAKE_CURRENT_BINARY_DIR}/omarchy-screenshot.service" @ONLY)
+configure_file(systemd/screenshot.service.in
+    "${CMAKE_CURRENT_BINARY_DIR}/screenshot.service" @ONLY)
 install(FILES
-    systemd/omarchy-screenshot.socket
-    "${CMAKE_CURRENT_BINARY_DIR}/omarchy-screenshot.service"
+    systemd/screenshot.socket
+    "${CMAKE_CURRENT_BINARY_DIR}/screenshot.service"
     DESTINATION "${SYSTEMD_USER_UNIT_DIR}")
 
 include(CTest)

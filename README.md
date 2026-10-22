@@ -56,8 +56,8 @@ Pins are temporary and are not automatically saved or copied. Existing pins hide
 Supports 42 language or regional variants and follows the system interface language by default. Keyboard layouts do not affect the interface language. To override it:
 
 ```sh
-omarchy-screenshot --language zh_CN
-OMARCHY_SCREENSHOT_LANGUAGE=ja omarchy-screenshot
+screenshot --language zh_CN
+OMARCHY_SCREENSHOT_LANGUAGE=ja screenshot
 ```
 
 Priority: `--language` > `OMARCHY_SCREENSHOT_LANGUAGE` > system preferences (`LANGUAGE`, `LC_ALL`, `LC_MESSAGES`, `LANG`). Selection takes effect at startup, accepts tags such as `pt-BR` and `zh-Hant`, and falls back to English when no translation matches. Shortcuts stay the same. See [translations/](translations/) for available languages; `noto-fonts` and `noto-fonts-cjk` are recommended for font coverage.
@@ -69,26 +69,26 @@ Qt Linguist `.ts` translations are embedded during the build. After changing int
 Requires a Hyprland Wayland session; supports `x86_64` and `aarch64`. Install from the AUR on Omarchy:
 
 ```sh
-omarchy pkg aur add omarchy-screenshot
+omarchy pkg aur add screenshot
 ```
 
 Set shortcuts in `~/.config/hypr/bindings.lua` for immediate capture with `Ctrl+Alt+A` and a five-second countdown with `Ctrl+Alt+Shift+A`:
 
 ```lua
 hl.unbind("CTRL + ALT + A")
-o.bind("CTRL + ALT + A", "Omarchy Screenshot", "omarchy-screenshot")
+o.bind("CTRL + ALT + A", "Omarchy Screenshot", "screenshot")
 hl.unbind("CTRL + ALT + SHIFT + A")
-o.bind("CTRL + ALT + SHIFT + A", "Screenshot after 5 seconds", "omarchy-screenshot --delay 5")
+o.bind("CTRL + ALT + SHIFT + A", "Screenshot after 5 seconds", "screenshot --delay 5")
 ```
 
-The delayed shortcut shows a film-style circular countdown from 5 to 1 in the center of the active screen. It passes keyboard and mouse input through, so you can switch windows or open menus. The countdown fades out and closes before capturing, keeping it out of the screenshot. You can also run `omarchy-screenshot --delay 5`; `--delay` accepts 0–60 seconds, with 0 (the default) capturing immediately.
+The delayed shortcut shows a film-style circular countdown from 5 to 1 in the center of the active screen. It passes keyboard and mouse input through, so you can switch windows or open menus. The countdown fades out and closes before capturing, keeping it out of the screenshot. You can also run `screenshot --delay 5`; `--delay` accepts 0–60 seconds, with 0 (the default) capturing immediately.
 
 Building from source requires `cmake`, `gcc`, `pkgconf`, `qt6-base`, `qt6-declarative`, `qt6-wayland`, `qt6-tools`, `layer-shell-qt`, `wayland`, `wayland-protocols`, `grim`, `wl-clipboard`, and `hyprland`. Tests also require `python` by default; disable them with `-DBUILD_TESTING=OFF`.
 
 ```sh
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j
-./build/omarchy-screenshot
+./build/screenshot
 ```
 
 Install locally, configuring the service path for resident mode:
@@ -104,17 +104,17 @@ cmake --install build
 The repository also supplies a Quickshell bar widget with plugin ID `io.github.manateelazycat.screenshot`. Install the native application first; the standard plugin installer copies the widget but does not compile or install the Qt application. The five-second countdown requires native version 0.1.12 or later.
 
 ```sh
-omarchy pkg aur add omarchy-screenshot
-omarchy plugin add https://github.com/manateelazycat/omarchy-screenshot --enable
+omarchy pkg aur add screenshot
+omarchy plugin add https://github.com/manateelazycat/screenshot --enable
 ```
 
-Left-click the camera button to capture immediately, or right-click for the five-second circular countdown. The widget launches `omarchy-screenshot` from `PATH`. For a local build, configure its bar entry with `"command": "/home/yourname/.local/bin/omarchy-screenshot"`. Installing the widget does not change Hyprland shortcuts; configure those explicitly using the example above.
+Left-click the camera button to capture immediately, or right-click for the five-second circular countdown. The widget launches `screenshot` from `PATH`. For a local build, configure its bar entry with `"command": "/home/yourname/.local/bin/screenshot"`. Installing the widget does not change Hyprland shortcuts; configure those explicitly using the example above.
 
-Remove the widget with `omarchy plugin remove io.github.manateelazycat.screenshot`. To also remove an AUR installation, run `omarchy pkg drop omarchy-screenshot`. For a source installation under `~/.local`, stop its optional socket and daemon with `systemctl --user disable --now omarchy-screenshot.socket` and `systemctl --user stop omarchy-screenshot.service`, then remove `~/.local/bin/omarchy-screenshot` and any installed `omarchy-screenshot.service` and `omarchy-screenshot.socket` user units. Remove shortcut entries you added from `~/.config/hypr/bindings.lua`.
+Remove the widget with `omarchy plugin remove io.github.manateelazycat.screenshot`. To also remove an AUR installation, run `omarchy pkg drop screenshot`. For a source installation under `~/.local`, stop its optional socket and daemon with `systemctl --user disable --now screenshot.socket` and `systemctl --user stop screenshot.service`, then remove `~/.local/bin/screenshot` and any installed `screenshot.service` and `screenshot.socket` user units. Remove shortcut entries you added from `~/.config/hypr/bindings.lua`.
 
 ### Tests
 
-`ctest --test-dir build --output-on-failure` checks translations, scroll stitching, cursor suppression and restoration, the daemon, and image sampling at different scales without a desktop session. Inside Hyprland, `./build/cursor-live-test` checks monitor captures and scrolling frames while the pointer moves across outputs and changes between three shapes; it briefly covers each screen with a solid fixture. Run these additional checks with `./build/omarchy-screenshot` and the listed options:
+`ctest --test-dir build --output-on-failure` checks translations, scroll stitching, cursor suppression and restoration, the daemon, and image sampling at different scales without a desktop session. Inside Hyprland, `./build/cursor-live-test` checks monitor captures and scrolling frames while the pointer moves across outputs and changes between three shapes; it briefly covers each screen with a solid fixture. Run these additional checks with `./build/screenshot` and the listed options:
 
 | Option | Checks |
 | --- | --- |
@@ -129,24 +129,24 @@ Remove the widget with `omarchy plugin remove io.github.manateelazycat.screensho
 Off by default. Reusing Qt and GPU initialization reduces startup overhead; each capture still waits for compositor cursor suppression. The daemon exits after 10 idle minutes and uses about 100 MB of RAM plus 320 MB of GPU memory while running.
 
 ```sh
-systemctl --user enable --now omarchy-screenshot.socket   # Enable
-systemctl --user disable --now omarchy-screenshot.socket  # Disable and stop the daemon
+systemctl --user enable --now screenshot.socket   # Enable
+systemctl --user disable --now screenshot.socket  # Disable and stop the daemon
 ```
 
-Without systemd, add `omarchy-screenshot --daemon` to your session's autostart. Keep the same shortcut; only launches without options use the daemon. `--language`, `--delay`, and self-tests run independently.
+Without systemd, add `screenshot --daemon` to your session's autostart. Keep the same shortcut; only launches without options use the daemon. `--language`, `--delay`, and self-tests run independently.
 
-Run `systemctl --user edit omarchy-screenshot.service` to change the idle timeout (seconds; `0` means no timeout), keeping the actual installation path:
+Run `systemctl --user edit screenshot.service` to change the idle timeout (seconds; `0` means no timeout), keeping the actual installation path:
 
 ```ini
 [Service]
 ExecStart=
-ExecStart=/usr/bin/omarchy-screenshot --daemon --idle-timeout 1800
+ExecStart=/usr/bin/screenshot --daemon --idle-timeout 1800
 ```
 
 Omarchy's overlay fade-in can add up to 400 ms. For immediate display, add this rule to `~/.config/hypr/hyprland.lua`:
 
 ```lua
-hl.layer_rule({ match = { namespace = "^omarchy-screenshot$" }, no_anim = true, animation = "none" })
+hl.layer_rule({ match = { namespace = "^screenshot$" }, no_anim = true, animation = "none" })
 ```
 
 ### AUR publishing

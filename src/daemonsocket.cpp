@@ -57,7 +57,7 @@ std::string daemonSocketPath() {
   const char *runtime = std::getenv("XDG_RUNTIME_DIR");
   if (!runtime || !*runtime)
     return {};
-  const std::string path = std::string(runtime) + "/omarchy-screenshot.sock";
+  const std::string path = std::string(runtime) + "/screenshot.sock";
   return path.size() < sizeof(sockaddr_un::sun_path) ? path : std::string();
 }
 

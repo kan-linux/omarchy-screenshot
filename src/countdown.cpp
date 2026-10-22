@@ -52,7 +52,7 @@ bool showCaptureCountdown(int seconds, QString *error) {
 
   if (QGuiApplication::platformName().startsWith(QStringLiteral("wayland"))) {
     auto *layer = LayerShellQt::Window::get(&view);
-    layer->setScope(QStringLiteral("omarchy-screenshot-countdown"));
+    layer->setScope(QStringLiteral("screenshot-countdown"));
     layer->setLayer(LayerShellQt::Window::LayerOverlay);
     layer->setAnchors(LayerShellQt::Window::AnchorNone);
     layer->setExclusiveZone(-1);

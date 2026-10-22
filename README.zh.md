@@ -56,8 +56,8 @@
 支持 42 种语言／地区模式，默认跟随系统界面语言；键盘布局不影响界面语言。可单独指定：
 
 ```sh
-omarchy-screenshot --language zh_CN
-OMARCHY_SCREENSHOT_LANGUAGE=ja omarchy-screenshot
+screenshot --language zh_CN
+OMARCHY_SCREENSHOT_LANGUAGE=ja screenshot
 ```
 
 优先级：`--language` > `OMARCHY_SCREENSHOT_LANGUAGE` > 系统语言（`LANGUAGE`、`LC_ALL`、`LC_MESSAGES`、`LANG`）。启动时生效，支持 `pt-BR`、`zh-Hant` 等标签，无匹配翻译时回退到英语；快捷键不变。完整语言列表见 [translations/](translations/)，字体建议安装 `noto-fonts` 和 `noto-fonts-cjk`。
@@ -69,26 +69,26 @@ OMARCHY_SCREENSHOT_LANGUAGE=ja omarchy-screenshot
 需要 Hyprland Wayland 会话，支持 `x86_64` 和 `aarch64`。在 Omarchy 上从 AUR 安装：
 
 ```sh
-omarchy pkg aur add omarchy-screenshot
+omarchy pkg aur add screenshot
 ```
 
 在 `~/.config/hypr/bindings.lua` 中设置截图快捷键：`Ctrl+Alt+A` 立即截图，`Ctrl+Alt+Shift+A` 延时 5 秒截图：
 
 ```lua
 hl.unbind("CTRL + ALT + A")
-o.bind("CTRL + ALT + A", "Omarchy Screenshot", "omarchy-screenshot")
+o.bind("CTRL + ALT + A", "Omarchy Screenshot", "screenshot")
 hl.unbind("CTRL + ALT + SHIFT + A")
-o.bind("CTRL + ALT + SHIFT + A", "Screenshot after 5 seconds", "omarchy-screenshot --delay 5")
+o.bind("CTRL + ALT + SHIFT + A", "Screenshot after 5 seconds", "screenshot --delay 5")
 ```
 
-延时快捷键会在当前屏幕中央显示电影开拍风格的圆环倒计时，从 5 倒数到 1；等待期间可以切换窗口或展开菜单，提示不会抢占键盘或鼠标。倒计时结束后，提示先完全淡出并关闭，再抓取画面并显示选区界面，截图不会包含倒计时。也可以运行 `omarchy-screenshot --delay 5`，`--delay` 支持 0–60 秒，默认 0 表示立即截图。
+延时快捷键会在当前屏幕中央显示电影开拍风格的圆环倒计时，从 5 倒数到 1；等待期间可以切换窗口或展开菜单，提示不会抢占键盘或鼠标。倒计时结束后，提示先完全淡出并关闭，再抓取画面并显示选区界面，截图不会包含倒计时。也可以运行 `screenshot --delay 5`，`--delay` 支持 0–60 秒，默认 0 表示立即截图。
 
 从源码构建需要 `cmake`、`gcc`、`pkgconf`、`qt6-base`、`qt6-declarative`、`qt6-wayland`、`qt6-tools`、`layer-shell-qt`、`wayland`、`wayland-protocols`、`grim`、`wl-clipboard` 和 `hyprland`。默认测试还需要 `python`，可用 `-DBUILD_TESTING=OFF` 关闭。
 
 ```sh
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j
-./build/omarchy-screenshot
+./build/screenshot
 ```
 
 本地安装（同时配置常驻模式所需的 service 路径）：
@@ -104,17 +104,17 @@ cmake --install build
 仓库也提供 Quickshell 栏按钮，插件 ID 为 `io.github.manateelazycat.screenshot`。需要先安装原生截图程序；标准插件安装只安装栏按钮，不会编译或安装 Qt 程序。5 秒倒计时要求原生程序版本 0.1.12 或更新版本。
 
 ```sh
-omarchy pkg aur add omarchy-screenshot
-omarchy plugin add https://github.com/manateelazycat/omarchy-screenshot --enable
+omarchy pkg aur add screenshot
+omarchy plugin add https://github.com/manateelazycat/screenshot --enable
 ```
 
-左键点击相机按钮立即截图，右键点击显示 5 秒圆环倒计时。插件从 `PATH` 启动 `omarchy-screenshot`；使用本地构建时，可在栏配置中的对应条目设置 `"command": "/home/yourname/.local/bin/omarchy-screenshot"`。安装栏按钮不会修改 Hyprland 快捷键，快捷键按上方示例手动配置。
+左键点击相机按钮立即截图，右键点击显示 5 秒圆环倒计时。插件从 `PATH` 启动 `screenshot`；使用本地构建时，可在栏配置中的对应条目设置 `"command": "/home/yourname/.local/bin/screenshot"`。安装栏按钮不会修改 Hyprland 快捷键，快捷键按上方示例手动配置。
 
-卸载栏按钮：`omarchy plugin remove io.github.manateelazycat.screenshot`。需要同时卸载 AUR 程序时，运行 `omarchy pkg drop omarchy-screenshot`。从源码安装到 `~/.local` 时，先用 `systemctl --user disable --now omarchy-screenshot.socket` 和 `systemctl --user stop omarchy-screenshot.service` 停止可选的常驻进程，再删除 `~/.local/bin/omarchy-screenshot` 及安装的 `omarchy-screenshot.service`、`omarchy-screenshot.socket` 用户服务文件；从 `~/.config/hypr/bindings.lua` 移除自己添加的快捷键。
+卸载栏按钮：`omarchy plugin remove io.github.manateelazycat.screenshot`。需要同时卸载 AUR 程序时，运行 `omarchy pkg drop screenshot`。从源码安装到 `~/.local` 时，先用 `systemctl --user disable --now screenshot.socket` 和 `systemctl --user stop screenshot.service` 停止可选的常驻进程，再删除 `~/.local/bin/screenshot` 及安装的 `screenshot.service`、`screenshot.socket` 用户服务文件；从 `~/.config/hypr/bindings.lua` 移除自己添加的快捷键。
 
 ### 测试
 
-`ctest --test-dir build --output-on-failure` 无需桌面会话，可检查翻译、滚动拼接、光标隐藏与恢复、常驻进程及不同缩放下的图像采样。在 Hyprland 中运行 `./build/cursor-live-test` 可验证鼠标跨屏移动、切换三种光标时的普通截图和滚动取帧；测试期间各屏会短暂显示纯色画面。以下自检可用 `./build/omarchy-screenshot` 加对应参数运行：
+`ctest --test-dir build --output-on-failure` 无需桌面会话，可检查翻译、滚动拼接、光标隐藏与恢复、常驻进程及不同缩放下的图像采样。在 Hyprland 中运行 `./build/cursor-live-test` 可验证鼠标跨屏移动、切换三种光标时的普通截图和滚动取帧；测试期间各屏会短暂显示纯色画面。以下自检可用 `./build/screenshot` 加对应参数运行：
 
 | 参数 | 检查内容 |
 | --- | --- |
@@ -129,24 +129,24 @@ omarchy plugin add https://github.com/manateelazycat/omarchy-screenshot --enable
 默认关闭。开启后复用 Qt 和 GPU 初始化，减少每次截图的启动开销；每次取帧仍需等待光标隐藏生效。空闲 10 分钟后自动退出，运行时约占 100 MB 内存和 320 MB 显存。
 
 ```sh
-systemctl --user enable --now omarchy-screenshot.socket   # 开启
-systemctl --user disable --now omarchy-screenshot.socket  # 关闭并停止后台进程
+systemctl --user enable --now screenshot.socket   # 开启
+systemctl --user disable --now screenshot.socket  # 关闭并停止后台进程
 ```
 
-无 systemd 时可将 `omarchy-screenshot --daemon` 加入会话自启动。快捷键无需修改；仅无参数启动转交后台进程，`--language`、`--delay` 和自测独立运行。
+无 systemd 时可将 `screenshot --daemon` 加入会话自启动。快捷键无需修改；仅无参数启动转交后台进程，`--language`、`--delay` 和自测独立运行。
 
-运行 `systemctl --user edit omarchy-screenshot.service` 可修改空闲超时（秒，`0` 表示不退出），保留实际安装路径：
+运行 `systemctl --user edit screenshot.service` 可修改空闲超时（秒，`0` 表示不退出），保留实际安装路径：
 
 ```ini
 [Service]
 ExecStart=
-ExecStart=/usr/bin/omarchy-screenshot --daemon --idle-timeout 1800
+ExecStart=/usr/bin/screenshot --daemon --idle-timeout 1800
 ```
 
 Omarchy 的覆盖层淡入可能额外延迟最多 400 ms。要立即显示，在 `~/.config/hypr/hyprland.lua` 中加入：
 
 ```lua
-hl.layer_rule({ match = { namespace = "^omarchy-screenshot$" }, no_anim = true, animation = "none" })
+hl.layer_rule({ match = { namespace = "^screenshot$" }, no_anim = true, animation = "none" })
 ```
 
 ### AUR 发布

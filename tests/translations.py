@@ -40,7 +40,7 @@ class Translations(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.catalogs = {
-            path.stem.removeprefix("omarchy-screenshot_"): messages(path)
+            path.stem.removeprefix("screenshot_"): messages(path)
             for path in (args.source / "translations").glob("*.ts")
         }
         cls.env = {
@@ -81,7 +81,7 @@ class Translations(unittest.TestCase):
             with self.subTest(locale=locale):
                 self.assertEqual(set(catalog), sources)
                 root = ET.parse(args.source / "translations" /
-                                f"omarchy-screenshot_{locale}.ts").getroot()
+                                f"screenshot_{locale}.ts").getroot()
                 self.assertEqual(root.attrib["language"], locale)
                 for (_, source), translation in catalog.items():
                     self.assertNotIn(translation.get("type"),

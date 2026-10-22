@@ -10,7 +10,7 @@
 // The resident daemon's request socket. Plain C++ on purpose: the client side
 // runs before Qt starts, so forwarding a capture costs no toolkit start-up.
 
-// $XDG_RUNTIME_DIR/omarchy-screenshot.sock, or empty without a runtime dir.
+// $XDG_RUNTIME_DIR/screenshot.sock, or empty without a runtime dir.
 std::string daemonSocketPath();
 
 // Asks a listening daemon (or the systemd socket holding its place) for a

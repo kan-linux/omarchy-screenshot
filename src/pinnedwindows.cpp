@@ -70,7 +70,7 @@ bool PinnedWindows::setMonitors(const QVector<CaptureMonitor> &monitors) {
       view->setInitialProperties(
           {{QStringLiteral("screenRect"), monitor.geometry}});
       auto *layer = LayerShellQt::Window::get(view.get());
-      layer->setScope(QStringLiteral("omarchy-screenshot-pin"));
+      layer->setScope(QStringLiteral("screenshot-pin"));
       layer->setLayer(LayerShellQt::Window::LayerOverlay);
       layer->setAnchors(
           LayerShellQt::Window::Anchors(LayerShellQt::Window::AnchorTop) |

@@ -165,7 +165,7 @@ int main(int argc, char **argv) {
     return 0;
   QGuiApplication app(argc, argv);
   app.setQuitOnLastWindowClosed(false);
-  app.setApplicationName(QStringLiteral("omarchy-screenshot"));
+  app.setApplicationName(QStringLiteral("screenshot"));
   app.setOrganizationName(QStringLiteral("Omarchy"));
 
   // Parse once before translation so even --help uses the requested language.
@@ -205,7 +205,7 @@ int main(int argc, char **argv) {
     // English is the source language, not a missing catalog to skip over.
     if (locale.language() == QLocale::English || locale.language() == QLocale::C)
       break;
-    if (translator.load(locale, QStringLiteral("omarchy-screenshot"),
+    if (translator.load(locale, QStringLiteral("screenshot"),
                         QStringLiteral("_"), QStringLiteral(":/i18n"))) {
       translated = true;
       break;
@@ -690,7 +690,7 @@ int main(int argc, char **argv) {
          {QStringLiteral("screenRect"), monitor.geometry}});
 
     auto *layer = LayerShellQt::Window::get(view.get());
-    layer->setScope(QStringLiteral("omarchy-screenshot"));
+    layer->setScope(QStringLiteral("screenshot"));
     layer->setLayer(LayerShellQt::Window::LayerOverlay);
     layer->setAnchors(
         LayerShellQt::Window::Anchors(LayerShellQt::Window::AnchorTop) |
@@ -764,7 +764,7 @@ int main(int argc, char **argv) {
     view->setFlags(Qt::FramelessWindowHint);
     view->setScreen(scrollScreen());
     auto *layer = LayerShellQt::Window::get(view.get());
-    layer->setScope(QStringLiteral("omarchy-screenshot"));
+    layer->setScope(QStringLiteral("screenshot"));
     layer->setLayer(LayerShellQt::Window::LayerOverlay);
     layer->setExclusiveZone(-1);
     layer->setScreen(scrollScreen());
@@ -1032,7 +1032,7 @@ int main(int argc, char **argv) {
     // plain launches reuse it, so older pins can be excluded from captures.
     if (added && !uiTest && !daemon && !requests) {
       const std::string path = pinUiTest
-          ? testSettings->filePath(QStringLiteral("omarchy-screenshot.sock")).toStdString()
+          ? testSettings->filePath(QStringLiteral("screenshot.sock")).toStdString()
           : daemonSocketPath();
       std::string listenError;
       if (listenForCaptureRequests(path, &listener, &socketLock, &listenError) ==

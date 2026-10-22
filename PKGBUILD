@@ -1,10 +1,10 @@
 # Maintainer: Andy Stewart <lazycat.manatee@gmail.com>
-pkgname=omarchy-screenshot
+pkgname=screenshot
 pkgver=0.1.12
 pkgrel=1
 pkgdesc="Qt 6 screenshot and annotation tool for Omarchy and Hyprland"
 arch=('x86_64' 'aarch64')
-url="https://github.com/manateelazycat/omarchy-screenshot"
+url="https://github.com/manateelazycat/screenshot"
 license=('GPL-3.0-only' 'MIT')
 depends=('qt6-base' 'qt6-declarative' 'qt6-wayland' 'layer-shell-qt' 'grim' 'wl-clipboard' 'hyprland' 'wayland')
 makedepends=('cmake' 'pkgconf' 'qt6-tools' 'python' 'wayland-protocols')

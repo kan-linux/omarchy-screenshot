@@ -44,7 +44,7 @@ CursorCaptureGuard::CursorCaptureGuard(QString *error) {
                                QCryptographicHash::Sha256)
           .toHex();
   const QByteArray path = QFile::encodeName(
-      QDir(runtime).filePath(QStringLiteral("omarchy-screenshot-cursor-%1.lock")
+      QDir(runtime).filePath(QStringLiteral("screenshot-cursor-%1.lock")
                                  .arg(QString::fromLatin1(instance.left(16)))));
   m_lock =
       open(path.constData(), O_CREAT | O_RDWR | O_CLOEXEC | O_NOFOLLOW, 0600);
